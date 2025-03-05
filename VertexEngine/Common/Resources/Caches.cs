@@ -8,7 +8,7 @@ namespace VertexEngine.Common.Resources
 
         public static string CachePath =>
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                @$"EngineTK\{ProjectName}\Cache");
+                @$"VertexEngine\{ProjectName}\Cache");
 
         static Caches()
         {

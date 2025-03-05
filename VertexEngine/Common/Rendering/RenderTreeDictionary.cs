@@ -1,5 +1,4 @@
-﻿using EngineTK.Common.Rendering;
-using VertexEngine.Common.Elements;
+﻿using VertexEngine.Common.Elements;
 
 namespace VertexEngine.Common.Rendering
 {

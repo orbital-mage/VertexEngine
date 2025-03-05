@@ -1,5 +1,4 @@
-﻿using EngineTK.Common.Rendering;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Graphics3D.Assets;
 

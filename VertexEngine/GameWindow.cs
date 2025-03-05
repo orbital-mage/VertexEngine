@@ -13,7 +13,7 @@ namespace VertexEngine
     public abstract class GameWindow : OpenTK.Windowing.Desktop.GameWindow, IGameWindow
     {
         public static IGameWindow CurrentWindow { get; private set; }
-        public static Vector2i CurrentWindowSize => CurrentWindow.ClientSize;
+        public static Vector2i CurrentWindowSize => CurrentWindow.Size;
         public static RenderOptions CurrentRenderOptions => CurrentWindow.RenderOptions;
         public static KeyboardState CurrentKeyboardState => CurrentWindow.KeyboardState;
         public static MouseState CurrentMouseState => CurrentWindow.MouseState;
@@ -83,7 +83,7 @@ namespace VertexEngine
 
         protected override void OnResize(ResizeEventArgs e)
         {
-            TreeRenderer.SetViewportSize(ClientSize);
+            TreeRenderer.SetViewportSize(Size);
         }
     }
 }

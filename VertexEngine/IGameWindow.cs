@@ -12,7 +12,7 @@ namespace VertexEngine
         
         public Vector4? BackgroundColor { set; get; }
 
-        public Vector2i ClientSize { get; set; }
+        public Vector2i Size { get; set; }
         public KeyboardState KeyboardState { get; }
         public MouseState MouseState { get; }
 

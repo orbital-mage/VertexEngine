@@ -8,8 +8,8 @@ namespace VertexEngine.Common.Utils;
 
 public static class ResourceUtils
 {
-    private const string ResourcesPrefix = "EngineTK.Resources.";
-    private const string ShadersPrefix = "EngineTK.Shaders.";
+    private const string ResourcesPrefix = "VertexEngine.Resources.";
+    private const string ShadersPrefix = "VertexEngine.Shaders.";
     private const string ResourceSeparator = ".";
 
     private static readonly string InternalFilePrefix = PathUtils.NormalizePath("~/");

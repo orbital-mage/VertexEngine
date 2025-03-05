@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace EngineTK.Common.Rendering
+namespace VertexEngine.Common.Rendering
 {
     public class RenderBufferObject
     {
