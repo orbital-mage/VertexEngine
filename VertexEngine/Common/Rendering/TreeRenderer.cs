@@ -7,7 +7,7 @@ using VertexEngine.Graphics3D.Elements.Interfaces;
 
 namespace VertexEngine.Common.Rendering
 {
-    public class TreeRenderer(IElement root)
+    public class TreeRenderer
     {
         public static void SetViewportSize(Vector2i size)
         {
@@ -28,8 +28,14 @@ namespace VertexEngine.Common.Rendering
 
         private readonly HashSet<IElement> changedElements = [];
         private HashSet<IElement> elementSet = [];
-        private IElement root = root;
-        private bool wasTreeChanged;
+        private IElement root;
+        private bool wasTreeChanged = true;
+
+        public TreeRenderer(IElement root)
+        {
+            this.root = root;
+            root.TreeChanged += (_, _) => wasTreeChanged = true;
+        }
 
         protected virtual IRenderTreeBranch ElementTree { get; } = new PriorityDictionary(AssetGetters);
 
