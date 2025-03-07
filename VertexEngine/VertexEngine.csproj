@@ -4,6 +4,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Authors>orbital-mage</Authors>
+        <PackageProjectUrl>https://github.com/orbital-mage/VertexEngine</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +23,13 @@
     <ItemGroup>
         <EmbeddedResource Include="Shaders\**\**"/>
         <EmbeddedResource Include="Resources\**\**"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>
