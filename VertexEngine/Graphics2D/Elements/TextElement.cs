@@ -26,7 +26,7 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
     private readonly FontRenderer fontRenderer;
 
     private string text = "";
-    private FontSystem fontSystem;
+    private FontSystem? fontSystem;
     private int fontSize = 12;
 
     public TextElement() : base(null, TextShader)
@@ -61,7 +61,7 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         }
     }
 
-    public FontSystem FontSystem
+    public FontSystem? FontSystem
     {
         get => fontSystem;
         set
@@ -107,7 +107,7 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         set => materialManager.Material = value;
     }
 
-    public TextCamera Camera
+    public TextCamera? Camera
     {
         get => cameraManager.Camera;
         set => cameraManager.Camera = value;
@@ -115,7 +115,7 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
 
     private void RenderText()
     {
-        if (fontSystem is null) return;
+        if (FontSystem is null) return;
 
         var font = FontSystem.GetFont(FontSize);
         var position = GameWindow.CurrentWindowSize / 2;

@@ -43,7 +43,7 @@ namespace VertexEngine.Graphics3D.Elements.Tree
         private string vertexShader = DefaultVertexShader;
         private string fragmentShader = DefaultFragmentShader;
 
-        public event EventHandler ShaderChanged;
+        public event EventHandler? ShaderChanged;
 
         public Shader3DManager(IShader3DElement element) : base(element)
         {
@@ -102,13 +102,13 @@ namespace VertexEngine.Graphics3D.Elements.Tree
             lightsManager.DePropagate(child);
         }
 
-        private void OnMaterialChanged(object sender, MaterialChangeArgs args)
+        private void OnMaterialChanged(object? sender, MaterialChangeArgs args)
         {
             if (args.AreTexturesUpdated) UpdateTextures();
             if (args.IsFootPrintChanged) UpdateShader();
         }
 
-        private void OnLightsChanges(object sender, LightsChangedArgs args)
+        private void OnLightsChanges(object? sender, LightsChangedArgs args)
         {
             if (args.TexturesChanged) UpdateTextures();
             UpdateShader();

@@ -27,13 +27,13 @@ namespace VertexEngine.Graphics3D.Assets.Lights
             }
         }
 
-        public new OmnidirectionalShadowMap ShadowMap
+        public new OmnidirectionalShadowMap? ShadowMap
         {
             get => base.ShadowMap as OmnidirectionalShadowMap;
             init
             {
                 base.ShadowMap = value;
-                ShadowMap.Position = position;
+                if (ShadowMap != null) ShadowMap.Position = position;
             }
         }
     }

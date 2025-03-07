@@ -50,10 +50,14 @@ namespace VertexEngine.Common.Assets.Mesh
 
             return value;
         }
-
-        protected VertexObject()
+        
+        // Needs empty constructor for tests
+        #pragma warning disable CS8618, CS9264
+        internal VertexObject()
         {
+            
         }
+        #pragma warning restore CS8618, CS9264
 
         private VertexObject(
             float[] vertices,

@@ -8,7 +8,7 @@ namespace VertexEngine.Common.Assets.Sets
         private readonly HashSet<T> assets = [];
         private readonly Dictionary<object, int> groupCount = new();
 
-        public event EventHandler<AssetSetChangedArgs<T>> AssetsChanged;
+        public event EventHandler<AssetSetChangedArgs<T>>? AssetsChanged;
 
         public IEnumerable<T> Assets => assets;
         public ImmutableAssetSet<T> Asset { get; private set; } = new(ImmutableHashSet<T>.Empty);

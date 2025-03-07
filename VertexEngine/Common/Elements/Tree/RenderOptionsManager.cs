@@ -6,7 +6,7 @@ namespace VertexEngine.Common.Elements.Tree
     {
         private RenderOptions? renderOptions;
 
-        public event EventHandler OptionsChanged;
+        public event EventHandler? OptionsChanged;
 
         public RenderOptions? RenderOptions
         {
@@ -31,7 +31,7 @@ namespace VertexEngine.Common.Elements.Tree
             Propagate(child, DePropagateAction);
         }
 
-        private void OnOptionsChanged(object sender, EventArgs args)
+        private void OnOptionsChanged(object? sender, EventArgs args)
         {
             OnOptionsChanged();
         }

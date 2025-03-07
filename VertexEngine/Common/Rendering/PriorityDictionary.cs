@@ -3,7 +3,7 @@ using VertexEngine.Common.Elements;
 
 namespace VertexEngine.Common.Rendering
 {
-    public class PriorityDictionary(Func<IElement, IAsset>[] assetGetters) : RenderTreeDictionary<int>
+    public class PriorityDictionary(Func<IElement, IAsset?>[] assetGetters) : RenderTreeDictionary<int>
     {
         private readonly SortedSet<int> priorityOrder = [];
 

@@ -23,8 +23,8 @@ namespace EngineTests
                 Size = Vector2i.One
             });
 
-        private TreeRenderer renderer = new();
-        private Mock<IElement> rootMock = new();
+        private TreeRenderer renderer;
+        private Mock<IElement> rootMock;
 
         [OneTimeSetUp]
         public void Setup()
@@ -47,8 +47,8 @@ namespace EngineTests
         [SetUp]
         public void SetUp()
         {
-            renderer = new TreeRenderer();
             rootMock = new Mock<IElement>();
+            renderer = new TreeRenderer(rootMock.Object);
 
             var obj = rootMock.As<IElement>().Object;
             renderer.Root = obj;

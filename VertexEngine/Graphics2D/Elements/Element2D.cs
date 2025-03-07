@@ -27,11 +27,11 @@ namespace VertexEngine.Graphics2D.Elements
         {
         }
 
-        public Element2D(VertexObject vertexObject) : this(vertexObject, ColorShader)
+        public Element2D(VertexObject? vertexObject) : this(vertexObject, ColorShader)
         {
         }
 
-        public Element2D(VertexObject vertexObject, Shader shader) : base(vertexObject, shader)
+        public Element2D(VertexObject? vertexObject, Shader? shader) : base(vertexObject, shader)
         {
             transformManager = new Transform2DManager(this);
             materialManager = new MaterialManager(this);
@@ -69,7 +69,7 @@ namespace VertexEngine.Graphics2D.Elements
             set => transformManager.GlobalTransform = value;
         }
 
-        public Camera2D Camera
+        public Camera2D? Camera
         {
             get => cameraManager.Camera;
             set => cameraManager.Camera = value;

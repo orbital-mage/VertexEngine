@@ -6,7 +6,7 @@
         private StencilTestingOptions stencilTestingOptions = StencilTestingOptions.Off;
         private BlendingOptions blendingOptions = BlendingOptions.Off;
         private FaceCullingOptions faceCullingOptions = FaceCullingOptions.Off;
-        public event EventHandler OptionsChanged;
+        public event EventHandler? OptionsChanged;
 
         public RenderOptions()
         {

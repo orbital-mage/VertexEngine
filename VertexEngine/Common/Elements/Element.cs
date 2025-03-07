@@ -10,12 +10,12 @@ namespace VertexEngine.Common.Elements
         private readonly ChildrenManager childrenManager;
         private readonly RenderOptionsManager renderOptionsManager;
 
-        private VertexObject vertexObject;
-        private Shader shader;
+        private VertexObject? vertexObject;
+        private Shader? shader;
         private int priority;
 
-        public event EventHandler<TreeChangedArgs> TreeChanged;
-        public event EventHandler AssetsChanged;
+        public event EventHandler<TreeChangedArgs>? TreeChanged;
+        public event EventHandler? AssetsChanged;
 
         public Element() : this(null, null)
         {
@@ -34,7 +34,7 @@ namespace VertexEngine.Common.Elements
 
         public IEnumerable<IElement> Children => childrenManager.Children;
 
-        public virtual IElement Parent
+        public virtual IElement? Parent
         {
             get => childrenManager.Parent;
             set => childrenManager.Parent = value;
@@ -122,7 +122,7 @@ namespace VertexEngine.Common.Elements
 
         public virtual void Draw()
         {
-            VertexObject.Draw();
+            VertexObject?.Draw();
         }
 
         protected virtual void PropagateAssets(IElement child)
@@ -140,7 +140,7 @@ namespace VertexEngine.Common.Elements
             AssetsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnTreeChanged(object sender, TreeChangedArgs args)
+        private void OnTreeChanged(object? sender, TreeChangedArgs args)
         {
             OnTreeChanged(args);
         }

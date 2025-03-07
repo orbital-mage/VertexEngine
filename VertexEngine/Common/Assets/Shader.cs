@@ -26,9 +26,13 @@ namespace VertexEngine.Common.Assets
                 .Build();
         }
 
+        // Needs empty constructor for tests
+        #pragma warning disable CS8618, CS9264
         internal Shader()
         {
+            
         }
+        #pragma warning restore CS8618, CS9264
 
         internal Shader(string fragSource, string vertSource)
         {

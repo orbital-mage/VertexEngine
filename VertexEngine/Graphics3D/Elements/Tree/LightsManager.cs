@@ -11,7 +11,7 @@ namespace VertexEngine.Graphics3D.Elements.Tree
     {
         private AssetSet<Light> lights = [];
 
-        public event EventHandler<LightsChangedArgs> LightsChanged;
+        public event EventHandler<LightsChangedArgs>? LightsChanged;
 
         public LightsManager(ILightElement element) : base(element)
         {
@@ -30,7 +30,7 @@ namespace VertexEngine.Graphics3D.Elements.Tree
             }
         }
 
-        public AssetSet<Texture> Textures { get; } = new();
+        public AssetSet<Texture> Textures { get; } = [];
 
         public override void Propagate(IElement child)
         {
@@ -71,7 +71,7 @@ namespace VertexEngine.Graphics3D.Elements.Tree
             return lights
                 .Select(light => light.ShadowMap?.Texture)
                 .Where(texture => texture != null)
-                .ToArray();
+                .ToArray()!;
         }
     }
 }

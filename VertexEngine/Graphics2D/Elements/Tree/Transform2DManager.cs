@@ -11,7 +11,7 @@ namespace VertexEngine.Graphics2D.Elements.Tree
         private Transform2D localTransform = new();
         private Transform2D globalTransform = new();
 
-        public event EventHandler TransformChanged;
+        public event EventHandler? TransformChanged;
 
         public Transform2DManager(ITransformElement<Transform2D> element) : base(element)
         {
@@ -53,7 +53,7 @@ namespace VertexEngine.Graphics2D.Elements.Tree
             Propagate(child, DePropagateAction);
         }
 
-        private void OnLocalChange(object sender, EventArgs args)
+        private void OnLocalChange(object? sender, EventArgs args)
         {
             OnLocalChange();
         }
@@ -66,7 +66,7 @@ namespace VertexEngine.Graphics2D.Elements.Tree
             Propagate((GlobalTransform.Matrix, LocalTransform.Size), PropagateAction);
         }
 
-        private void OnGlobalChange(object sender, EventArgs args)
+        private void OnGlobalChange(object? sender, EventArgs args)
         {
             OnGlobalChange();
         }

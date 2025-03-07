@@ -27,13 +27,13 @@ namespace VertexEngine.Graphics3D.Assets.Lights
             }
         }
 
-        public new DirectionalShadowMap ShadowMap
+        public new DirectionalShadowMap? ShadowMap
         {
             get => base.ShadowMap as DirectionalShadowMap;
             init
             {
                 base.ShadowMap = value;
-                ShadowMap.Direction = direction;
+                if (ShadowMap != null) ShadowMap.Direction = direction;
             }
         }
     }

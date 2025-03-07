@@ -2,7 +2,7 @@
 
 namespace VertexEngine.Common.Rendering
 {
-    public abstract class RenderTreeDictionary<T> : IRenderTreeBranch
+    public abstract class RenderTreeDictionary<T> : IRenderTreeBranch where T : notnull
     {
         private const int BranchThreshold = 100;
 
@@ -56,7 +56,7 @@ namespace VertexEngine.Common.Rendering
             return Dictionary.Count <= emptyBranches.Count;
         }
 
-        protected abstract T GetKey(IElement element);
+        protected abstract T? GetKey(IElement element);
 
         protected abstract void InitBranch(T key);
     }

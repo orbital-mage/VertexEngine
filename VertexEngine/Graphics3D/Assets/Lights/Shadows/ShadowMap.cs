@@ -12,8 +12,10 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
 
         private Texture texture;
 
-        protected ShadowMap()
+        protected ShadowMap(Texture texture)
         {
+            this.texture = texture;
+            
             FrameBuffer.SetDrawBuffer(DrawBufferMode.None);
             FrameBuffer.SetReadBuffer(ReadBufferMode.None);
         }

@@ -3,17 +3,14 @@ using VertexEngine.Common.Elements.Interfaces;
 
 namespace VertexEngine.Common.Elements.Tree
 {
-    public class CameraManager<T> : TreeManager<ICameraElement<T>> where T : Camera
+    public class CameraManager<T>(ICameraElement<T> element) : TreeManager<ICameraElement<T>>(element)
+        where T : Camera
     {
-        private T camera;
+        private T? camera;
 
-        public event EventHandler CameraChanged;
+        public event EventHandler? CameraChanged;
 
-        public CameraManager(ICameraElement<T> element) : base(element)
-        {
-        }
-
-        public T Camera
+        public T? Camera
         {
             get => camera;
             set

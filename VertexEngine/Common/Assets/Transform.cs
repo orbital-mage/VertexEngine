@@ -11,7 +11,7 @@ namespace VertexEngine.Common.Assets
             {TransformUniform, Matrix4.Identity}
         };
 
-        public event EventHandler TransformChanged;
+        public event EventHandler? TransformChanged;
 
         public Matrix4 Matrix
         {

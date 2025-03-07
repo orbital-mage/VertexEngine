@@ -25,12 +25,12 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
         {
         }
 
-        public DirectionalShadowMap(Vector2i resolution)
+        public DirectionalShadowMap(Vector2i resolution) : base(Texture2D.Empty(
+            resolution,
+            PixelInternalFormat.DepthComponent,
+            PixelFormat.DepthComponent,
+            PixelType.Float))
         {
-            Texture = Texture2D.Empty(resolution,
-                PixelInternalFormat.DepthComponent,
-                PixelFormat.DepthComponent,
-                PixelType.Float);
             Texture.SetMinMagFilter(TextureMinFilter.Nearest, TextureMagFilter.Nearest);
             Texture.SetWrapMode(TextureWrapMode.ClampToBorder);
             Texture.SetBorderColor(Vector4.One);
@@ -38,11 +38,7 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
 
         public override Shader Shader => DirectionalShdShadowMapShader;
 
-        public new Texture2D Texture
-        {
-            get => base.Texture as Texture2D;
-            private init => base.Texture = value;
-        }
+        public new Texture2D Texture => (base.Texture as Texture2D)!;
 
         public override Dictionary<string, object> Uniforms => new(base.Uniforms)
         {

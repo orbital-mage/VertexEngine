@@ -7,14 +7,14 @@ using VertexEngine.Graphics3D.Elements.Interfaces;
 
 namespace VertexEngine.Common.Rendering
 {
-    public class TreeRenderer
+    public class TreeRenderer(IElement root)
     {
         public static void SetViewportSize(Vector2i size)
         {
             GL.Viewport(0, 0, size.X, size.Y);
         }
 
-        private static readonly Func<IElement, IAsset>[] AssetGetters =
+        private static readonly Func<IElement, IAsset?>[] AssetGetters =
         {
             element => element.RenderOptions?.Asset ?? GameWindow.CurrentRenderOptions.Asset,
             element => element.Shader,
@@ -28,7 +28,7 @@ namespace VertexEngine.Common.Rendering
 
         private readonly HashSet<IElement> changedElements = [];
         private HashSet<IElement> elementSet = [];
-        private IElement root;
+        private IElement root = root;
         private bool wasTreeChanged;
 
         protected virtual IRenderTreeBranch ElementTree { get; } = new PriorityDictionary(AssetGetters);
@@ -117,12 +117,12 @@ namespace VertexEngine.Common.Rendering
             element.AssetsChanged -= OnElementChanged;
         }
 
-        private void OnElementChanged(object sender, EventArgs _)
+        private void OnElementChanged(object? sender, EventArgs _)
         {
             if (sender is IElement element) changedElements.Add(element);
         }
 
-        protected static Func<IElement, IAsset> Get<T>(Func<T, IAsset> getter) where T : IElement
+        protected static Func<IElement, IAsset?> Get<T>(Func<T, IAsset?> getter) where T : IElement
         {
             return element => element is T t ? getter.Invoke(t) : IAsset.Empty;
         }

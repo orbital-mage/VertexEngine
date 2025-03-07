@@ -3,10 +3,10 @@ using VertexEngine.Common.Elements;
 
 namespace VertexEngine.Common.Rendering
 {
-    public class AssetDictionary(Func<IElement, IAsset>[] assetGetters, Dictionary<Type, IAsset> currentAssets)
+    public class AssetDictionary(Func<IElement, IAsset?>[] assetGetters, Dictionary<Type, IAsset> currentAssets)
         : RenderTreeDictionary<IAsset>
     {
-        public AssetDictionary(params Func<IElement, IAsset>[] assetGetters) :
+        public AssetDictionary(params Func<IElement, IAsset?>[] assetGetters) :
             this(assetGetters, new Dictionary<Type, IAsset>())
         {
         }
@@ -24,7 +24,7 @@ namespace VertexEngine.Common.Rendering
             }
         }
 
-        protected override IAsset GetKey(IElement element)
+        protected override IAsset? GetKey(IElement element)
         {
             return assetGetters[0].Invoke(element);
         }

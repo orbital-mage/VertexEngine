@@ -47,7 +47,7 @@ namespace VertexEngine.Graphics3D.Elements
             RenderOptions = SkyboxRenderOptions;
         }
 
-        public PerspectiveCamera Camera
+        public PerspectiveCamera? Camera
         {
             get => cameraManager.Camera;
             set => cameraManager.Camera = value;

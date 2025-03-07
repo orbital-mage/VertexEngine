@@ -62,7 +62,7 @@ namespace VertexEngine.Common.Resources.Models
                 postProcessSteps);
         }
 
-        public static Scene ReadSceneFromStream(Stream stream, PostProcessSteps postProcessSteps, string formatHint = null)
+        public static Scene ReadSceneFromStream(Stream stream, PostProcessSteps postProcessSteps, string? formatHint = null)
         {
             return Context.ImportFileFromStream(stream,
                 PostProcessSteps.Triangulate |

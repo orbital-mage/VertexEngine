@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using VertexEngine.Common.Assets.Sets;
+﻿using VertexEngine.Common.Assets.Sets;
 using VertexEngine.Common.Assets.Textures;
 
 namespace VertexEngine.Common.Assets
@@ -14,6 +11,8 @@ namespace VertexEngine.Common.Assets
         public static void SetUniforms(Dictionary<Type, IAsset> assets, Dictionary<string, object> uniforms)
         {
             var shader = IAsset.GetAsset<Shader>(assets);
+
+            if (shader == null) return;
 
             foreach (var (name, value) in uniforms)
             {
@@ -30,6 +29,8 @@ namespace VertexEngine.Common.Assets
         {
             var shader = IAsset.GetAsset<Shader>(assets);
 
+            if (shader == null) return;
+
             foreach (var (name, value) in uniforms)
             {
                 var fullName = GetFullName(arrayName, name, unit);
@@ -42,7 +43,7 @@ namespace VertexEngine.Common.Assets
         {
             return value switch
             {
-                Texture texture => IAsset.GetAsset<ImmutableAssetSet<Texture>>(currentResources).GetUnit(texture),
+                Texture texture => IAsset.GetAsset<ImmutableAssetSet<Texture>>(currentResources)?.GetUnit(texture) ?? 0,
                 _ => value
             };
         }

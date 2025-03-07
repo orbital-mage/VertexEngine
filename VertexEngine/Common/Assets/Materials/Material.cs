@@ -10,7 +10,7 @@ namespace VertexEngine.Common.Assets.Materials
 
         public UniformAsset Asset { get; private set; }
 
-        public event EventHandler<MaterialChangeArgs> ValuesChanged;
+        public event EventHandler<MaterialChangeArgs>? ValuesChanged;
 
         public Material()
         {

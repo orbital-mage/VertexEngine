@@ -25,23 +25,19 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
         private float nearPlane = 1f;
         private float farPlane = 15;
 
-        public OmnidirectionalShadowMap()
+        public OmnidirectionalShadowMap() : base(Cubemap.Empty(
+            Vector2i.One * 2048, 
+            PixelInternalFormat.DepthComponent,
+            PixelFormat.DepthComponent, 
+            PixelType.Float))
         {
-            Texture = Cubemap.Empty(Vector2i.One * 2048,
-                PixelInternalFormat.DepthComponent,
-                PixelFormat.DepthComponent,
-                PixelType.Float);
             Texture.SetMinMagFilter(TextureMinFilter.Nearest, TextureMagFilter.Nearest);
             Texture.SetWrapMode(TextureWrapMode.ClampToEdge);
         }
 
         public override Shader Shader => OmnidirectionalShdShadowMapShader;
 
-        public new Cubemap Texture
-        {
-            get => base.Texture as Cubemap;
-            private init => base.Texture = value;
-        }
+        public new Cubemap Texture => (base.Texture as Cubemap)!;
 
         public override Dictionary<string, object> Uniforms => new(base.Uniforms)
         {

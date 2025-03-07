@@ -9,7 +9,7 @@ namespace VertexEngine.Common.Elements.Tree
     {
         private IMaterial material = new Material();
 
-        public event EventHandler<MaterialChangeArgs> MaterialChanged;
+        public event EventHandler<MaterialChangeArgs>? MaterialChanged;
 
         public MaterialManager(IMaterialElement element) : base(element)
         {
@@ -38,7 +38,7 @@ namespace VertexEngine.Common.Elements.Tree
         {
         }
 
-        private void OnMaterialChanged(object sender, MaterialChangeArgs args)
+        private void OnMaterialChanged(object? sender, MaterialChangeArgs args)
         {
             OnMaterialChanged(args);
         }

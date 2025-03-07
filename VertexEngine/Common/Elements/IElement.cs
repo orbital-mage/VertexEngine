@@ -14,8 +14,8 @@ namespace VertexEngine.Common.Elements
         public IEnumerable<IElement> Children { get; }
         public IElement? Parent { get; }
 
-        public Shader Shader { get; set; }
-        public VertexObject VertexObject { get; set; }
+        public Shader? Shader { get; set; }
+        public VertexObject? VertexObject { get; set; }
         public RenderOptions? RenderOptions { get; set; }
         public int Priority { get; }
 

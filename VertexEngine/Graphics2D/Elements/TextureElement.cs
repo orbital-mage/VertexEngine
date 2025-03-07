@@ -56,7 +56,7 @@ namespace VertexEngine.Graphics2D.Elements
 
         public Texture2D Texture
         {
-            get => Material[ImageUniform] as Texture2D;
+            get => (Material[ImageUniform] as Texture2D)!;
             set => Material[ImageUniform] = value;
         }
 
@@ -72,7 +72,7 @@ namespace VertexEngine.Graphics2D.Elements
             set => transformManager.GlobalTransform = value;
         }
 
-        public Camera2D Camera
+        public Camera2D? Camera
         {
             get => cameraManager.Camera;
             set => cameraManager.Camera = value;

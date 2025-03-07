@@ -7,19 +7,20 @@ using VertexEngine.Common.Assets.Rendering;
 using VertexEngine.Common.Elements;
 using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Resources;
+using VertexEngine.Common.Utils;
 
 namespace VertexEngine
 {
     public abstract class GameWindow : OpenTK.Windowing.Desktop.GameWindow, IGameWindow
     {
-        public static IGameWindow CurrentWindow { get; private set; }
+        public static IGameWindow CurrentWindow { get; private set; } = DummyWindow.Instance;
         public static Vector2i CurrentWindowSize => CurrentWindow.Size;
         public static RenderOptions CurrentRenderOptions => CurrentWindow.RenderOptions;
         public static KeyboardState CurrentKeyboardState => CurrentWindow.KeyboardState;
         public static MouseState CurrentMouseState => CurrentWindow.MouseState;
 
-        private readonly TreeRenderer renderer = new();
         private IElement root;
+        private readonly TreeRenderer renderer;
 
         public Vector4? BackgroundColor
         {
@@ -27,7 +28,7 @@ namespace VertexEngine
             set => renderer.BackgroundColor = value;
         }
 
-        public RenderOptions RenderOptions => Root.RenderOptions;
+        public RenderOptions RenderOptions { get; } = new();
 
         public IElement Root
         {
@@ -35,7 +36,6 @@ namespace VertexEngine
             set
             {
                 root = value;
-                root.RenderOptions ??= new RenderOptions();
                 renderer.Root = root;
             }
         }
@@ -43,12 +43,13 @@ namespace VertexEngine
         protected GameWindow(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {
+            root = new Element();
+            renderer = new TreeRenderer(root);
+
             Caches.ProjectName = Title;
-            Root = new Element();
-            renderer.Root = Root;
             BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1f);
         }
-        
+
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -84,6 +85,43 @@ namespace VertexEngine
         protected override void OnResize(ResizeEventArgs e)
         {
             TreeRenderer.SetViewportSize(Size);
+        }
+    }
+
+    internal class DummyWindow : IGameWindow
+    {
+        public static readonly DummyWindow Instance = new();
+
+        private DummyWindow()
+        {
+        }
+
+        public IElement Root
+        {
+            get => throw new UninitializedException();
+            set => throw new UninitializedException();
+        }
+
+        public RenderOptions RenderOptions => throw new UninitializedException();
+
+        public Vector4? BackgroundColor
+        {
+            get => throw new UninitializedException();
+            set => throw new UninitializedException();
+        }
+
+        public Vector2i Size
+        {
+            get => throw new UninitializedException();
+            set => throw new UninitializedException();
+        }
+
+        public KeyboardState KeyboardState => throw new UninitializedException();
+        public MouseState MouseState => throw new UninitializedException();
+
+        public void Close()
+        {
+            throw new UninitializedException();
         }
     }
 }

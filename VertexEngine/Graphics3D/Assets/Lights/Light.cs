@@ -31,14 +31,14 @@ namespace VertexEngine.Graphics3D.Assets.Lights
         public Vector3 Diffuse { get; set; }
         public Vector3 Specular { get; set; }
 
-        public ShadowMap ShadowMap { get; protected init; }
+        public ShadowMap? ShadowMap { get; protected init; }
 
         public virtual void Use(Dictionary<Type, IAsset> assets, int unit)
         {
             UniformUtils.SetIndexedUniforms(assets, PrefixName, unit, Uniforms);
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(object? obj)
         {
             return GetHashCode().CompareTo(obj?.GetHashCode());
         }

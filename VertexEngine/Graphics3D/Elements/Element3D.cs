@@ -63,7 +63,7 @@ namespace VertexEngine.Graphics3D.Elements
             set => transformManager.GlobalTransform = value;
         }
 
-        public Camera3D Camera
+        public Camera3D? Camera
         {
             get => cameraManager.Camera;
             set => cameraManager.Camera = value;
