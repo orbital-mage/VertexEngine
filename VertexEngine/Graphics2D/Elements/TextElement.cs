@@ -119,12 +119,12 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
 
         var font = FontSystem.GetFont(FontSize);
         var position = GameWindow.CurrentWindowSize / 2;
-        var origin = font.MeasureString(text);
+        var size = font.MeasureString(text);
 
-        LocalTransform.SetElementSize(origin.ToOpenTkVector2().ToVector2I());
-        LocalTransform.Size = origin.ToOpenTkVector2().ToVector2I();
+        LocalTransform.SetElementSize(size.ToOpenTkVector2().ToVector2I());
+        LocalTransform.Size = size.ToOpenTkVector2().ToVector2I();
 
-        font.DrawText(fontRenderer, Text, position.ToSystemVector2(), FSColor.White, origin: origin);
+        font.DrawText(fontRenderer, Text, position.ToSystemVector2(), FSColor.White, origin: size / 2);
 
         var (vertexObject, atlas) = fontRenderer.CreateAssets();
 
