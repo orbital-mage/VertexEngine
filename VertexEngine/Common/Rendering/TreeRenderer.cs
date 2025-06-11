@@ -17,9 +17,9 @@ namespace VertexEngine.Common.Rendering
         private static readonly Func<IElement, IAsset?>[] AssetGetters =
         {
             element => element.RenderOptions?.Asset ?? GameWindow.CurrentRenderOptions.Asset,
-            element => element.Shader,
+            element => element.Shader ?? IAsset.Empty,
             Get<ICameraElement>(element => element.Camera),
-            element => element.VertexObject,
+            element => element.VertexObject ?? IAsset.Empty,
             Get<ITextureElement>(element => element.Textures.Asset),
             Get<ILightElement>(element => element.Lights.Asset),
             Get<IMaterialElement>(element => element.Material.Asset),
@@ -97,7 +97,7 @@ namespace VertexEngine.Common.Rendering
 
         private void HandleAssetUpdate()
         {
-            foreach (var element in changedElements)
+            foreach (var element in changedElements.Where(element => elementSet.Contains(element)))
             {
                 ElementTree.RemoveElement(element);
                 ElementTree.AddElement(element);

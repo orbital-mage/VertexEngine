@@ -13,12 +13,12 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
     protected override void OnLoad()
     {
         base.OnLoad();
-        
+
         var element = new Element3D(Shapes.Square);
-        
-        var camera = new PerspectiveCamera(Vector3.UnitZ, (float) Size.X / Size.Y);
+
+        var camera = new PerspectiveCamera(Vector3.UnitZ, (float)Size.X / Size.Y);
         element.Camera = camera;
-        
+
         Root.AddChild(element);
     }
 }
