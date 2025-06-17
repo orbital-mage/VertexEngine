@@ -1,12 +1,16 @@
 ﻿using OpenTK.Mathematics;
 using VertexEngine.Common.Assets;
+using VertexEngine.Common.Exceptions;
 
 namespace VertexEngine.Graphics2D.Assets
 {
     public class Transform2D : Transform
     {
-        private Vector2i? containerSize;
-        private Vector2i? elementSize;
+        private static Vector2i ContainerSize => GameWindow.CurrentWindowSize;
+        private static Vector2 AspectRatio => GameWindow.CurrentWindowSize.ToVector2().Normalized().Yx;
+        private static Matrix4 ScreenMatrix => Matrix4.CreateScale(new Vector3(AspectRatio.X, AspectRatio.Y, 1));
+
+        private Matrix4 NormalizedMatrix => Matrix * ScreenMatrix.Inverted();
 
         public Vector2 Translation
         {
@@ -43,30 +47,14 @@ namespace VertexEngine.Graphics2D.Assets
 
         public Vector2i Size
         {
-            get => (Vector2i)(Scale * ElementSize);
-            set => Scale = value.ToVector2() / ElementSize;
+            get => (Vector2i)(Scale * ContainerSize);
+            set => Scale = value.ToVector2() / ContainerSize;
         }
-        
-        public void SetContainerSize(Vector2i? size)
-        {
-            containerSize = size;
-        }
-
-        public void SetElementSize(Vector2i? size)
-        {
-            elementSize = size;
-        }
-
-        private Vector2i ContainerSize => containerSize ?? GameWindow.CurrentWindowSize;
-
-        private Vector2i ElementSize => elementSize ?? ContainerSize;
-
-        private Vector2 AspectRatio => ContainerSize.ToVector2().Normalized().Yx;
-        private Matrix4 ScreenMatrix => Matrix4.CreateScale(new Vector3(AspectRatio.X, AspectRatio.Y, 1));
-        private Matrix4 NormalizedMatrix => Matrix * ScreenMatrix.Inverted();
 
         private void UpdateMatrix(Vector2 translation, Vector2 scale, float rotation)
         {
+            if (scale.X == 0 || scale.Y == 0) throw new ZeroScaleException();
+
             scale /= AspectRatio;
             translation /= AspectRatio;
 

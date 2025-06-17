@@ -11,11 +11,12 @@ using VertexEngine.Common.Elements.Tree;
 using VertexEngine.Common.Text;
 using VertexEngine.Common.Utils;
 using VertexEngine.Graphics2D.Assets;
+using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
 
 namespace VertexEngine.Graphics2D.Elements;
 
-public class TextElement : Element, ITextElement, ITransformElement<Transform2D>, ICameraElement<TextCamera>
+public class TextElement : Element, ITextElement, ITransformElement2D, ICameraElement<TextCamera>
 {
     private static readonly Shader TextShader = Shader.FromFiles("~/Text/shader.frag", "~/Text/shader.vert");
 
@@ -35,6 +36,8 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         materialManager = new MaterialManager(this);
         cameraManager = new CameraManager<TextCamera>(this);
 
+        transformManager.UseScreenTransform = true;
+        LocalTransform.Position = Vector2i.Zero;
         Camera = new TextCamera();
 
         transformManager.TransformChanged += (_, _) => OnAssetChanged();
@@ -47,7 +50,7 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         {
             BlendingOptions = BlendingOptions.Basic
         };
-        
+
         Material[MaterialUniforms.Color] = Vector3.One;
     }
 
@@ -99,6 +102,8 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         set => transformManager.GlobalTransform = value;
     }
 
+    public bool UseScreenTransform => transformManager.UseScreenTransform;
+
     public AssetSet<Texture> Textures => materialManager.Textures;
 
     public IMaterial Material
@@ -120,9 +125,6 @@ public class TextElement : Element, ITextElement, ITransformElement<Transform2D>
         var font = FontSystem.GetFont(FontSize);
         var position = GameWindow.CurrentWindowSize / 2;
         var size = font.MeasureString(text);
-
-        LocalTransform.SetElementSize(size.ToOpenTkVector2().ToVector2I());
-        LocalTransform.Size = size.ToOpenTkVector2().ToVector2I();
 
         font.DrawText(fontRenderer, Text, position.ToSystemVector2(), FSColor.White, origin: size / 2);
 

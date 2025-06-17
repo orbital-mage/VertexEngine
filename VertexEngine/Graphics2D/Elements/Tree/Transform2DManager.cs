@@ -1,19 +1,19 @@
 ﻿using OpenTK.Mathematics;
 using VertexEngine.Common.Elements;
-using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
 using VertexEngine.Graphics2D.Assets;
+using VertexEngine.Graphics2D.Elements.Interfaces;
 
 namespace VertexEngine.Graphics2D.Elements.Tree
 {
-    public class Transform2DManager : TreeManager<ITransformElement<Transform2D>>
+    public class Transform2DManager : TreeManager<ITransformElement2D>
     {
         private Transform2D localTransform = new();
         private Transform2D globalTransform = new();
 
         public event EventHandler? TransformChanged;
 
-        public Transform2DManager(ITransformElement<Transform2D> element) : base(element)
+        public Transform2DManager(ITransformElement2D element) : base(element)
         {
             localTransform.TransformChanged += OnLocalChange;
             globalTransform.TransformChanged += OnGlobalChange;
@@ -43,9 +43,11 @@ namespace VertexEngine.Graphics2D.Elements.Tree
             }
         }
 
+        public bool UseScreenTransform { get; set; }
+
         public override void Propagate(IElement child)
         {
-            Propagate(child, (GlobalTransform.Matrix, LocalTransform.Size), PropagateAction);
+            Propagate(child, GlobalTransform, PropagateAction);
         }
 
         public override void DePropagate(IElement child)
@@ -60,10 +62,12 @@ namespace VertexEngine.Graphics2D.Elements.Tree
 
         private void OnLocalChange()
         {
-            GlobalTransform.Matrix = LocalTransform.Matrix * GetParentMatrix();
-            LocalTransform.SetContainerSize(GetParentSize());
+            if (UseScreenTransform)
+                GlobalTransform.Matrix = CalculateGlobalTransform(LocalTransform, GetParentTransform());
+            else
+                GlobalTransform.Matrix = LocalTransform.Matrix * (GetParentTransform()?.Matrix ?? Matrix4.Identity);
 
-            Propagate((GlobalTransform.Matrix, LocalTransform.Size), PropagateAction);
+            Propagate(GlobalTransform, PropagateAction);
         }
 
         private void OnGlobalChange(object? sender, EventArgs args)
@@ -75,43 +79,65 @@ namespace VertexEngine.Graphics2D.Elements.Tree
         {
             if (!IsGlobalChanged())
             {
-                Propagate((GlobalTransform.Matrix, LocalTransform.Size), PropagateAction);
+                Propagate(GlobalTransform, PropagateAction);
                 return;
             }
 
-            LocalTransform.Matrix = GlobalTransform.Matrix * GetParentMatrix().Inverted();
-            LocalTransform.SetContainerSize(GetParentSize());
+            if (UseScreenTransform)
+                LocalTransform.Matrix = CalculateLocalTransform(GlobalTransform, GetParentTransform());
+            else
+                LocalTransform.Matrix =
+                    GlobalTransform.Matrix * (GetParentTransform()?.Matrix.Inverted() ?? Matrix4.Identity);
 
             TransformChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private static void PropagateAction(ITransformElement<Transform2D> child,
-            (Matrix4 globalMatrix, Vector2i localSize) args)
-        {
-            child.LocalTransform.SetContainerSize(args.localSize);
-            child.GlobalTransform.Matrix = child.LocalTransform.Matrix * args.globalMatrix;
-        }
-
-        private static void DePropagateAction(ITransformElement<Transform2D> child)
-        {
-            child.LocalTransform.SetContainerSize(null);
-            child.GlobalTransform.Matrix = child.LocalTransform.Matrix;
-        }
-
         private bool IsGlobalChanged()
         {
-            return GlobalTransform.Matrix != LocalTransform.Matrix * GetParentMatrix();
+            if (!UseScreenTransform)
+                return GlobalTransform.Matrix !=
+                       LocalTransform.Matrix * (GetParentTransform()?.Matrix ?? Matrix4.Identity);
+
+            return GlobalTransform.Matrix != CalculateGlobalTransform(LocalTransform, GetParentTransform());
         }
 
-        private Matrix4 GetParentMatrix()
+        private Transform2D? GetParentTransform()
         {
-            return GetAsset(parent => parent.GlobalTransform.Matrix,
-                Matrix4.Identity);
+            return GetAsset(parent => parent.GlobalTransform, null);
         }
 
-        private Vector2i? GetParentSize()
+        private static void PropagateAction(ITransformElement2D child, Transform2D parentTransform)
         {
-            return GetAsset<Vector2i?>(parent => parent.LocalTransform.Size, null);
+            child.GlobalTransform.Matrix = child.UseScreenTransform
+                ? CalculateGlobalTransform(child.LocalTransform, parentTransform)
+                : child.LocalTransform.Matrix * parentTransform.Matrix;
+        }
+
+        private static void DePropagateAction(ITransformElement2D child)
+        {
+            child.GlobalTransform.Matrix = child.UseScreenTransform
+                ? CalculateGlobalTransform(child.LocalTransform, null)
+                : child.LocalTransform.Matrix;
+        }
+
+        private static Matrix4 CalculateGlobalTransform(Transform2D local, Transform2D? parent)
+        {
+            return new Transform2D
+            {
+                Position = local.Position + (parent?.Position ?? Vector2i.Zero),
+                Rotation = local.Rotation + (parent?.Rotation ?? 0),
+                Size = local.Size,
+            }.Matrix;
+        }
+
+        private static Matrix4 CalculateLocalTransform(Transform2D global, Transform2D? parent)
+        {
+            return new Transform2D
+            {
+                Position = global.Position - (parent?.Position ?? Vector2i.Zero),
+                Rotation = global.Rotation - (parent?.Rotation ?? 0),
+                Size = global.Size,
+            }.Matrix;
         }
     }
 }

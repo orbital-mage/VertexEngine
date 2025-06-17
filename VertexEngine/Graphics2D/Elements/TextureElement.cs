@@ -1,4 +1,5 @@
-﻿using VertexEngine.Common.Assets;
+﻿using OpenTK.Mathematics;
+using VertexEngine.Common.Assets;
 using VertexEngine.Common.Assets.Materials;
 using VertexEngine.Common.Assets.Rendering;
 using VertexEngine.Common.Assets.Sets;
@@ -8,13 +9,14 @@ using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
 using VertexEngine.Common.Utils;
 using VertexEngine.Graphics2D.Assets;
+using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
 
 namespace VertexEngine.Graphics2D.Elements
 {
     public class TextureElement : Element,
         IMaterialElement,
-        ITransformElement<Transform2D>,
+        ITransformElement2D,
         ICameraElement<Camera2D>
     {
         private static readonly Shader TextureShader = Shader.FromFiles("~/_2D/texture.frag", "~/_2D/shader.vert");
@@ -36,7 +38,9 @@ namespace VertexEngine.Graphics2D.Elements
             cameraManager = new CameraManager<Camera2D>(this);
 
             Texture = texture;
-            LocalTransform.Size = Texture.Size;
+            UseScreenTransform = true;
+            LocalTransform.Position = Vector2i.Zero;
+            GlobalTransform.Size = Texture.Size;
             Camera = new Camera2D();
 
             RenderOptions = new RenderOptions
@@ -70,6 +74,12 @@ namespace VertexEngine.Graphics2D.Elements
         {
             get => transformManager.GlobalTransform;
             set => transformManager.GlobalTransform = value;
+        }
+
+        public bool UseScreenTransform
+        {
+            get => transformManager.UseScreenTransform;
+            set => transformManager.UseScreenTransform = value;
         }
 
         public Camera2D? Camera

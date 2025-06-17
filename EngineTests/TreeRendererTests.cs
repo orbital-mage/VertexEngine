@@ -60,7 +60,7 @@ namespace EngineTests
             renderer.UpdateTree();
             renderer.Draw();
 
-            VerifyDraw(rootMock, Times.Never());
+            VerifyDraw(rootMock, Times.Once());
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace EngineTests
             renderer.Draw();
 
             // Then
-            VerifyDraw(rootMock, Times.Never());
+            VerifyDraw(rootMock, Times.Once());
 
             VerifyAsset(shaderMock, Times.Once());
             VerifyAsset(voMock, Times.Once());
@@ -155,7 +155,7 @@ namespace EngineTests
             renderer.Draw();
 
             // Then
-            VerifyDraw(rootMock, Times.Never());
+            VerifyDraw(rootMock, Times.Once());
 
             foreach (var (child, assets) in mocks)
             {
@@ -194,7 +194,7 @@ namespace EngineTests
             renderer.Draw();
 
             // Then
-            VerifyDraw(rootMock, Times.Never());
+            VerifyDraw(rootMock, Times.Exactly(2));
             VerifyDraw(childMock, Times.Exactly(2));
             VerifyAsset(shaderMock, Times.Exactly(2));
             VerifyAsset(voMock, Times.Exactly(2));

@@ -7,13 +7,12 @@ using VertexEngine.Common.Assets.Rendering;
 using VertexEngine.Common.Elements;
 using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Resources;
-using VertexEngine.Common.Utils;
 
 namespace VertexEngine
 {
     public abstract class GameWindow : OpenTK.Windowing.Desktop.GameWindow, IGameWindow
     {
-        public static IGameWindow CurrentWindow { get; private set; } = DummyWindow.Instance;
+        public static GameWindow CurrentWindow { get; private set; } = null!;
         public static Vector2i CurrentWindowSize => CurrentWindow.Size;
         public static RenderOptions CurrentRenderOptions => CurrentWindow.RenderOptions;
         public static KeyboardState CurrentKeyboardState => CurrentWindow.KeyboardState;
@@ -82,46 +81,11 @@ namespace VertexEngine
             renderer.UpdateTree();
         }
 
-        protected override void OnResize(ResizeEventArgs e)
+        protected override void OnResize(ResizeEventArgs args)
         {
+            base.OnResize(args);
+
             TreeRenderer.SetViewportSize(Size);
-        }
-    }
-
-    internal class DummyWindow : IGameWindow
-    {
-        public static readonly DummyWindow Instance = new();
-
-        private DummyWindow()
-        {
-        }
-
-        public IElement Root
-        {
-            get => throw new UninitializedException();
-            set => throw new UninitializedException();
-        }
-
-        public RenderOptions RenderOptions => throw new UninitializedException();
-
-        public Vector4? BackgroundColor
-        {
-            get => throw new UninitializedException();
-            set => throw new UninitializedException();
-        }
-
-        public Vector2i Size
-        {
-            get => throw new UninitializedException();
-            set => throw new UninitializedException();
-        }
-
-        public KeyboardState KeyboardState => throw new UninitializedException();
-        public MouseState MouseState => throw new UninitializedException();
-
-        public void Close()
-        {
-            throw new UninitializedException();
         }
     }
 }

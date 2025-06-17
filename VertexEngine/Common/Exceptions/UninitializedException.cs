@@ -1,4 +1,4 @@
-﻿namespace VertexEngine.Common.Utils;
+﻿namespace VertexEngine.Common.Exceptions;
 
 public class UninitializedException() : SystemException(DefaultMessage)
 {

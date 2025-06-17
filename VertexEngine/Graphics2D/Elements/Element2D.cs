@@ -8,17 +8,18 @@ using VertexEngine.Common.Elements;
 using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
 using VertexEngine.Graphics2D.Assets;
+using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
 
 namespace VertexEngine.Graphics2D.Elements
 {
     public class Element2D : Element,
         IMaterialElement,
-        ITransformElement<Transform2D>,
+        ITransformElement2D,
         ICameraElement<Camera2D>
     {
         private static readonly Shader ColorShader = Shader.FromFiles("~/_2D/color.frag", "~/_2D/shader.vert");
-        
+
         private readonly Transform2DManager transformManager;
         private readonly MaterialManager materialManager;
         private readonly CameraManager<Camera2D> cameraManager;
@@ -67,6 +68,12 @@ namespace VertexEngine.Graphics2D.Elements
         {
             get => transformManager.GlobalTransform;
             set => transformManager.GlobalTransform = value;
+        }
+
+        public bool UseScreenTransform
+        {
+            get => transformManager.UseScreenTransform;
+            set => transformManager.UseScreenTransform = value;
         }
 
         public Camera2D? Camera
