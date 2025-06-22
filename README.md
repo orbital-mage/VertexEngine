@@ -9,7 +9,7 @@ The engine provides high-level functionality for 3D and 2D graphics, to allow fo
 The engine has been tested to work in Windows and Linux environments.
 
 ## Getting Started
-* Install the [NuGet package](https://www.nuget.org/packages/VertexEngine/1.0.0) in your project.
+* Install the [NuGet package](https://www.nuget.org/packages/VertexEngine/) in your project.
 * Create a new class a new class to extend `VertexEngine.GameWindow`:
   
   ```csharp
