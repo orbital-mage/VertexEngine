@@ -120,7 +120,7 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
 
     private void RenderText()
     {
-        if (FontSystem is null) return;
+        if (FontSystem is null || string.IsNullOrEmpty(text)) return;
 
         var font = FontSystem.GetFont(FontSize);
         var position = GameWindow.CurrentWindowSize / 2;

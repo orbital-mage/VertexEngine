@@ -45,8 +45,8 @@ public class FontRenderer : IFontStashRenderer2
 
     public (VertexObject vertexObject, Texture2D atlas) CreateAssets()
     {
-        var vertexArray = vertices.Take(GetVertexCount(spriteIndex + 1)).ToArray();
-        var indexArray = Indices.Take(GetIndexCount(spriteIndex + 1)).ToArray();
+        var vertexArray = vertices.Take(GetVertexCount(spriteIndex)).ToArray();
+        var indexArray = Indices.Take(GetIndexCount(spriteIndex)).ToArray();
         var texture = textures[textureIndex - 1];
 
         vertexIndex = 0;

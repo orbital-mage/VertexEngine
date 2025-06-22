@@ -17,6 +17,11 @@ namespace VertexEngine.Common.Elements
         public Shader? Shader { get; set; }
         public VertexObject? VertexObject { get; set; }
         public RenderOptions? RenderOptions { get; set; }
+        
+        /// <summary>
+        /// The rendering priority for the element. Lower priorities are rendered first.
+        /// Elements with the same priority are not sorted.
+        /// </summary>
         public int Priority { get; }
 
         public void AddChild(IElement child);

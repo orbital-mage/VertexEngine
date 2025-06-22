@@ -1,13 +1,8 @@
 ﻿namespace VertexEngine.Common.Elements.Tree
 {
-    public abstract class TreeManager<T> where T : IElement
+    public abstract class TreeManager<T>(T element) where T : IElement
     {
-        protected T Element { get; }
-
-        protected TreeManager(T element)
-        {
-            Element = element;
-        }
+        protected T Element { get; } = element;
 
         public abstract void Propagate(IElement child);
         public abstract void DePropagate(IElement child);

@@ -24,7 +24,7 @@ namespace VertexEngine.Common.Rendering
         public override void Draw()
         {
             foreach (var priority in priorityOrder)
-                Dictionary[priority]?.Draw();
+                Dictionary[priority].Draw();
         }
 
         protected override int GetKey(IElement element)
