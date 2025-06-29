@@ -20,7 +20,7 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
             FrameBuffer.SetReadBuffer(ReadBufferMode.None);
         }
 
-        public FrameBuffer FrameBuffer { get; } = new();
+        public FrameBuffer FrameBuffer { get; } = FrameBuffer.Create();
 
         public virtual Dictionary<string, object> Uniforms => new()
         {
@@ -44,7 +44,7 @@ namespace VertexEngine.Graphics3D.Assets.Lights.Shadows
         public virtual void Bind()
         {
             FrameBuffer.Bind();
-            GL.Viewport(0, 0, Size.X, Size.Y);
+            Viewport.Size = Size;
         }
     }
 }

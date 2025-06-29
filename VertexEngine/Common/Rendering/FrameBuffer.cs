@@ -6,12 +6,19 @@ namespace VertexEngine.Common.Rendering
 {
     public class FrameBuffer
     {
-        public static void BindDefault()
+        public static readonly FrameBuffer Default = new(0);
+
+        public static FrameBuffer Create()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            return new FrameBuffer(GL.GenFramebuffer());
         }
 
-        private readonly int handle = GL.GenFramebuffer();
+        private readonly int handle;
+
+        private FrameBuffer(int handle)
+        {
+            this.handle = handle;
+        }
 
         public void Bind()
         {

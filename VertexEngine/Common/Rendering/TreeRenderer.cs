@@ -9,13 +9,8 @@ namespace VertexEngine.Common.Rendering
 {
     public class TreeRenderer
     {
-        public static void SetViewportSize(Vector2i size)
-        {
-            GL.Viewport(0, 0, size.X, size.Y);
-        }
-
         private static readonly Func<IElement, IAsset?>[] AssetGetters =
-        {
+        [
             element => element.RenderOptions?.Asset ?? GameWindow.CurrentRenderOptions.Asset,
             element => element.Shader ?? IAsset.Empty,
             Get<ICameraElement>(element => element.Camera),
@@ -24,7 +19,7 @@ namespace VertexEngine.Common.Rendering
             Get<ILightElement>(element => element.Lights.Asset),
             Get<IMaterialElement>(element => element.Material.Asset),
             Get<ITransformElement>(element => element.Transform)
-        };
+        ];
 
         private readonly HashSet<IElement> changedElements = [];
         private HashSet<IElement> elementSet = [];

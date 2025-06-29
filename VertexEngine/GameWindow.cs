@@ -19,7 +19,7 @@ namespace VertexEngine
         public static MouseState CurrentMouseState => CurrentWindow.MouseState;
 
         private IElement root;
-        private readonly TreeRenderer renderer;
+        private readonly SimpleRenderer renderer;
 
         public Vector4? BackgroundColor
         {
@@ -43,7 +43,7 @@ namespace VertexEngine
             : base(gameWindowSettings, nativeWindowSettings)
         {
             root = new Element();
-            renderer = new TreeRenderer(root);
+            renderer = new SimpleRenderer(root, Size);
 
             Caches.ProjectName = Title;
             BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1f);
@@ -53,8 +53,8 @@ namespace VertexEngine
         {
             base.OnLoad();
 
-            GL.Viewport(0, 0, Size.X, Size.Y);
-
+            UseScreenRenderer();
+            
             CurrentWindow = this;
         }
 
@@ -85,7 +85,12 @@ namespace VertexEngine
         {
             base.OnResize(args);
 
-            TreeRenderer.SetViewportSize(Size);
+            renderer.ViewportSize = Size;
+        }
+
+        protected void UseScreenRenderer()
+        {
+            renderer.Use();
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using OpenTK.Mathematics;
 using VertexEngine.Common.Assets;
 using VertexEngine.Common.Exceptions;
+using VertexEngine.Common.Rendering;
 
 namespace VertexEngine.Graphics2D.Assets
 {
     public class Transform2D : Transform
     {
-        private static Vector2i ContainerSize => GameWindow.CurrentWindowSize;
+        private static Vector2i ContainerSize => Viewport.Size;
         private static Vector2 AspectRatio => GameWindow.CurrentWindowSize.ToVector2().Normalized().Yx;
         private static Matrix4 ScreenMatrix => Matrix4.CreateScale(new Vector3(AspectRatio.X, AspectRatio.Y, 1));
 
