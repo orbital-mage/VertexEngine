@@ -1,5 +1,6 @@
 using OpenTK.Mathematics;
 using VertexEngine.Common.Assets;
+using VertexEngine.Common.Rendering;
 
 namespace VertexEngine.Graphics2D.Assets;
 
@@ -7,7 +8,7 @@ public class TextCamera : Camera
 {
     public TextCamera()
     {
-        UpdateView(GameWindow.CurrentWindowSize);
+        UpdateView(Viewport.Size);
     }
 
     private void UpdateView(Vector2i size)

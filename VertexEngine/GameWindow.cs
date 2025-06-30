@@ -51,11 +51,10 @@ namespace VertexEngine
 
         protected override void OnLoad()
         {
-            base.OnLoad();
-
             UseScreenRenderer();
-            
             CurrentWindow = this;
+            
+            base.OnLoad();
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -76,15 +75,17 @@ namespace VertexEngine
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            base.OnUpdateFrame(args);
             CurrentWindow = this;
+            
+            base.OnUpdateFrame(args);
+            
             renderer.UpdateTree();
         }
 
         protected override void OnResize(ResizeEventArgs args)
         {
             base.OnResize(args);
-
+            
             renderer.ViewportSize = Size;
         }
 

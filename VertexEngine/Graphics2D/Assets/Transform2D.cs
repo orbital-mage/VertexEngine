@@ -8,7 +8,7 @@ namespace VertexEngine.Graphics2D.Assets
     public class Transform2D : Transform
     {
         private static Vector2i ContainerSize => Viewport.Size;
-        private static Vector2 AspectRatio => GameWindow.CurrentWindowSize.ToVector2().Normalized().Yx;
+        private static Vector2 AspectRatio => ContainerSize.ToVector2().Normalized().Yx;
         private static Matrix4 ScreenMatrix => Matrix4.CreateScale(new Vector3(AspectRatio.X, AspectRatio.Y, 1));
 
         private Matrix4 NormalizedMatrix => Matrix * ScreenMatrix.Inverted();

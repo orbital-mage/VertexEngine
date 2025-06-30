@@ -8,6 +8,7 @@ using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Common.Elements;
 using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
+using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Text;
 using VertexEngine.Common.Utils;
 using VertexEngine.Graphics2D.Assets;
@@ -123,7 +124,7 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
         if (FontSystem is null || string.IsNullOrEmpty(text)) return;
 
         var font = FontSystem.GetFont(FontSize);
-        var position = GameWindow.CurrentWindowSize / 2;
+        var position = Viewport.Size / 2;
         var size = font.MeasureString(text);
 
         font.DrawText(fontRenderer, Text, position.ToSystemVector2(), FSColor.White, origin: size / 2);
