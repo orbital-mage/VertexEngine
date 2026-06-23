@@ -4,6 +4,7 @@ using VertexEngine.Common.Assets.Materials;
 using VertexEngine.Common.Assets.Textures;
 using Material = VertexEngine.Common.Assets.Materials.Material;
 using RawMaterial = Assimp.Material;
+using Vector4 = System.Numerics.Vector4;
 
 namespace VertexEngine.Common.Resources.Models
 {
@@ -55,9 +56,9 @@ namespace VertexEngine.Common.Resources.Models
         private static object TextureSpecular(RawMaterial material) => GetTexture(material.TextureSpecular);
         private static object Shininess(RawMaterial material) => material.Shininess;
 
-        private static object GetColor(Color4D value)
+        private static object GetColor(Vector4 value)
         {
-            return new Vector3(value.R, value.G, value.B);
+            return new Vector3(value.X, value.Y, value.Z);
         }
 
         private static object GetTexture(TextureSlot value)

@@ -1,4 +1,5 @@
-﻿using Assimp;
+﻿using System.Numerics;
+using Assimp;
 using VertexEngine.Common.Assets.Mesh;
 
 namespace VertexEngine.Common.Resources.Models
@@ -19,7 +20,7 @@ namespace VertexEngine.Common.Resources.Models
 
         internal static (float[], uint[], VertexAttribute[]) ParseVertexData(Mesh mesh)
         {
-            return (GetVerticesFromMesh(mesh), mesh.GetUnsignedIndices(), GetVertexAttributesFromMesh(mesh));
+            return (GetVerticesFromMesh(mesh), mesh.GetUnsignedIndices().ToArray(), GetVertexAttributesFromMesh(mesh));
         }
 
         internal static (float[] vertices, uint[] indices, VertexAttribute[]) ParseVertexData(IEnumerable<Mesh> meshes)
@@ -78,9 +79,9 @@ namespace VertexEngine.Common.Resources.Models
             return attributes.ToArray();
         }
 
-        private static IEnumerable<float> Deconstruct(Vector3D vector)
+        private static IEnumerable<float> Deconstruct(Vector3 vector)
         {
-            return new[] {vector.X, vector.Y, vector.Z};
+            return [vector.X, vector.Y, vector.Z];
         }
     }
 }
