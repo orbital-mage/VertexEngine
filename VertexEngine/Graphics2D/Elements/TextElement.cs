@@ -8,22 +8,20 @@ using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Common.Elements;
 using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
-using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Text;
-using VertexEngine.Common.Utils;
 using VertexEngine.Graphics2D.Assets;
 using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
 
 namespace VertexEngine.Graphics2D.Elements;
 
-public class TextElement : Element, ITextElement, ITransformElement2D, ICameraElement<TextCamera>
+public class TextElement : Element, ITextElement, ITransformElement2D, ICameraElement<Camera2D>
 {
     private static readonly Shader TextShader = Shader.FromFiles("~/Text/shader.frag", "~/Text/shader.vert");
 
     private readonly Transform2DManager transformManager;
     private readonly MaterialManager materialManager;
-    private readonly CameraManager<TextCamera> cameraManager;
+    private readonly CameraManager<Camera2D> cameraManager;
 
     private readonly FontRenderer fontRenderer;
 
@@ -35,11 +33,10 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
     {
         transformManager = new Transform2DManager(this);
         materialManager = new MaterialManager(this);
-        cameraManager = new CameraManager<TextCamera>(this);
+        cameraManager = new CameraManager<Camera2D>(this);
 
         transformManager.UseScreenTransform = true;
-        LocalTransform.Position = Vector2i.Zero;
-        Camera = new TextCamera();
+        Camera = new Camera2D();
 
         transformManager.TransformChanged += (_, _) => OnAssetChanged();
         materialManager.MaterialChanged += (_, _) => OnAssetChanged();
@@ -49,7 +46,8 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
 
         RenderOptions = new RenderOptions
         {
-            BlendingOptions = BlendingOptions.Basic
+            BlendingOptions = BlendingOptions.Basic,
+            DepthTestingOptions = DepthTestingOptions.Off
         };
 
         Material[MaterialUniforms.Color] = Vector3.One;
@@ -113,7 +111,7 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
         set => materialManager.Material = value;
     }
 
-    public TextCamera? Camera
+    public Camera2D? Camera
     {
         get => cameraManager.Camera;
         set => cameraManager.Camera = value;
@@ -123,15 +121,14 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
     {
         if (FontSystem is null || string.IsNullOrEmpty(text)) return;
 
-        var font = FontSystem.GetFont(FontSize);
-        var position = Viewport.Size / 2;
-        var size = font.MeasureString(text);
+        var font = FontSystem.GetFont(fontSize);
 
-        font.DrawText(fontRenderer, Text, position.ToSystemVector2(), FSColor.White, origin: size / 2);
+        font.DrawText(fontRenderer, text, System.Numerics.Vector2.Zero, FSColor.White);
 
-        var (vertexObject, atlas) = fontRenderer.CreateAssets();
+        var (vertexObject, atlas, size) = fontRenderer.CreateAssets();
 
         VertexObject = vertexObject;
         Material[MaterialUniforms.FontAtlas] = atlas;
+        LocalTransform.Size = size;
     }
 }

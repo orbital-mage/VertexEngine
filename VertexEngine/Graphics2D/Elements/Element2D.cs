@@ -42,7 +42,8 @@ namespace VertexEngine.Graphics2D.Elements
 
             RenderOptions = new RenderOptions
             {
-                FaceCullingOptions = FaceCullingOptions.Off
+                FaceCullingOptions = FaceCullingOptions.Off,
+                DepthTestingOptions = DepthTestingOptions.Off,
             };
 
             transformManager.TransformChanged += (_, _) => OnAssetChanged();

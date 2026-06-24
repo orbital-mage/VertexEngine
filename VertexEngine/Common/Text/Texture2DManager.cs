@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using FontStashSharp.Interfaces;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Common.Utils;
@@ -8,7 +9,12 @@ namespace VertexEngine.Common.Text;
 
 public class Texture2DManager : ITexture2DManager
 {
-    public object CreateTexture(int width, int height) => Texture2D.Empty(new Vector2i(width, height));
+    public object CreateTexture(int width, int height)
+    {
+        var texture = Texture2D.Empty(new Vector2i(width, height));
+        texture.SetMinMagFilter(TextureMinFilter.Linear, TextureMagFilter.Linear);
+        return texture;
+    }
 
     public Point GetTextureSize(object texture)
     {

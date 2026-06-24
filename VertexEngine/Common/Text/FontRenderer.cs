@@ -1,4 +1,5 @@
 ﻿using FontStashSharp.Interfaces;
+using OpenTK.Mathematics;
 using VertexEngine.Common.Assets.Mesh;
 using VertexEngine.Common.Assets.Textures;
 
@@ -43,7 +44,7 @@ public class FontRenderer : IFontStashRenderer2
         AddVertex(bottomRight);
     }
 
-    public (VertexObject vertexObject, Texture2D atlas) CreateAssets()
+    public (VertexObject vertexObject, Texture2D atlas, Vector2i size) CreateAssets()
     {
         var vertexArray = vertices.Take(GetVertexCount(spriteIndex)).ToArray();
         var indexArray = Indices.Take(GetIndexCount(spriteIndex)).ToArray();
@@ -53,7 +54,43 @@ public class FontRenderer : IFontStashRenderer2
         textureIndex = 0;
         spriteIndex = 0;
 
-        return (VertexObject.From(vertexArray, indexArray, VertexAttributes), texture);
+        var (modelSpaceVertices, size) = ConvertToModelSpace(vertexArray);
+
+        return (VertexObject.From(modelSpaceVertices, indexArray, VertexAttributes), texture, size);
+    }
+
+    private static (float[] vertices, Vector2i size) ConvertToModelSpace(float[] vertices)
+    {
+        const int stride = 5;
+
+        if (vertices.Length == 0)
+            return (vertices, Vector2i.Zero);
+
+        var minX = float.MaxValue;
+        var minY = float.MaxValue;
+        var maxX = float.MinValue;
+        var maxY = float.MinValue;
+
+        for (var i = 0; i < vertices.Length; i += stride)
+        {
+            minX = Math.Min(minX, vertices[i]);
+            maxX = Math.Max(maxX, vertices[i]);
+            minY = Math.Min(minY, vertices[i + 1]);
+            maxY = Math.Max(maxY, vertices[i + 1]);
+        }
+
+        var width = Math.Max(maxX - minX, 1f);
+        var height = Math.Max(maxY - minY, 1f);
+        var normalized = new float[vertices.Length];
+        Array.Copy(vertices, normalized, vertices.Length);
+
+        for (var i = 0; i < normalized.Length; i += stride)
+        {
+            normalized[i] = 2f * (normalized[i] - minX) / width - 1f;
+            normalized[i + 1] = 1f - 2f * (normalized[i + 1] - minY) / height;
+        }
+
+        return (normalized, new Vector2i((int)Math.Ceiling(width), (int)Math.Ceiling(height)));
     }
 
     private void AddTexture(object texture)

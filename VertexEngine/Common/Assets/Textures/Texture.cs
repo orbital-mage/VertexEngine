@@ -41,7 +41,7 @@ namespace VertexEngine.Common.Assets.Textures
             Bind();
 
             GL.TexParameter(Type, TextureParameterName.TextureMinFilter, (int)minFilter);
-            GL.TexParameter(Type, TextureParameterName.TextureMinFilter, (int)magFilter);
+            GL.TexParameter(Type, TextureParameterName.TextureMagFilter, (int)magFilter);
         }
 
         public void SetWrapMode(TextureWrapMode wrapMode)

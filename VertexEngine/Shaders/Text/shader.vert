@@ -11,5 +11,5 @@ out vec2 textureCoord;
 void main()
 {
     textureCoord = TextureCoords;
-    gl_Position = vec4(Position, 1) * view * transform;
+    gl_Position = vec4(Position, 1) * transform * view;
 }
