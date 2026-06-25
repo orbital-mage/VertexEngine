@@ -8,6 +8,7 @@ using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Common.Elements;
 using VertexEngine.Common.Elements.Interfaces;
 using VertexEngine.Common.Elements.Tree;
+using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Text;
 using VertexEngine.Graphics2D.Assets;
 using VertexEngine.Graphics2D.Elements.Interfaces;
@@ -51,6 +52,8 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
         };
 
         Material[MaterialUniforms.Color] = Vector3.One;
+
+        Viewport.SizeChanged += (_, _) => RenderText();
     }
 
     public string Text
@@ -125,10 +128,10 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
 
         font.DrawText(fontRenderer, text, System.Numerics.Vector2.Zero, FSColor.White);
 
-        var (vertexObject, atlas, size) = fontRenderer.CreateAssets();
+        var (vertexObject, atlas, size) = fontRenderer.CreateAssets(LocalTransform.ContainerSize);
 
         VertexObject = vertexObject;
         Material[MaterialUniforms.FontAtlas] = atlas;
-        LocalTransform.Size = size;
+        LocalTransform.ContentSize = size;
     }
 }

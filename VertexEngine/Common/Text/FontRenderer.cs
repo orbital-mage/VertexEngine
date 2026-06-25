@@ -44,7 +44,7 @@ public class FontRenderer : IFontStashRenderer2
         AddVertex(bottomRight);
     }
 
-    public (VertexObject vertexObject, Texture2D atlas, Vector2i size) CreateAssets()
+    public (VertexObject vertexObject, Texture2D atlas, Vector2i size) CreateAssets(Vector2i layoutSize)
     {
         var vertexArray = vertices.Take(GetVertexCount(spriteIndex)).ToArray();
         var indexArray = Indices.Take(GetIndexCount(spriteIndex)).ToArray();
@@ -54,12 +54,12 @@ public class FontRenderer : IFontStashRenderer2
         textureIndex = 0;
         spriteIndex = 0;
 
-        var (modelSpaceVertices, size) = ConvertToModelSpace(vertexArray);
+        var (modelSpaceVertices, size) = ConvertToViewportSpace(vertexArray, layoutSize);
 
         return (VertexObject.From(modelSpaceVertices, indexArray, VertexAttributes), texture, size);
     }
 
-    private static (float[] vertices, Vector2i size) ConvertToModelSpace(float[] vertices)
+    private static (float[] vertices, Vector2i size) ConvertToViewportSpace(float[] vertices, Vector2i layoutSize)
     {
         const int stride = 5;
 
@@ -81,13 +81,16 @@ public class FontRenderer : IFontStashRenderer2
 
         var width = Math.Max(maxX - minX, 1f);
         var height = Math.Max(maxY - minY, 1f);
+        var centerX = minX + width / 2f;
+        var centerY = minY + height / 2f;
+        var halfLayout = layoutSize.ToVector2() / 2f;
         var normalized = new float[vertices.Length];
         Array.Copy(vertices, normalized, vertices.Length);
 
         for (var i = 0; i < normalized.Length; i += stride)
         {
-            normalized[i] = 2f * (normalized[i] - minX) / width - 1f;
-            normalized[i + 1] = 1f - 2f * (normalized[i + 1] - minY) / height;
+            normalized[i] = (normalized[i] - centerX) / halfLayout.X;
+            normalized[i + 1] = (centerY - normalized[i + 1]) / halfLayout.Y;
         }
 
         return (normalized, new Vector2i((int)Math.Ceiling(width), (int)Math.Ceiling(height)));
