@@ -12,6 +12,7 @@ namespace VertexEngine.Common.Assets.Materials
         public event EventHandler<MaterialChangeArgs> ValuesChanged;
 
         public void Add(string name, object value);
+        public bool Remove(string name);
         public object this[string name] { get; set; }
     }
 }

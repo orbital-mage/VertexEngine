@@ -36,6 +36,15 @@ namespace VertexEngine.Common.Assets.Materials
             SetValue(name, value);
         }
 
+        public bool Remove(string name)
+        {
+            if (!Values.Remove(name, out var value))
+                return false;
+
+            OnValuesChanged(MaterialChangeArgs.Get(isFootPrintChanged: true, areTexturesUpdated: value is Texture));
+            return true;
+        }
+
         public object this[string name]
         {
             get => Values[name];

@@ -82,6 +82,9 @@ namespace VertexEngine.Common.Elements
 
             child.TreeChanged += OnTreeChanged;
             OnTreeChanged(TreeChangedArgs.Added(child));
+
+            if (child is Element element)
+                element.OnAddedToTree();
         }
 
         public void AddChildren(IEnumerable<IElement> children)
@@ -95,6 +98,12 @@ namespace VertexEngine.Common.Elements
             }
 
             OnTreeChanged(TreeChangedArgs.Added(addedElements));
+
+            foreach (var child in addedElements)
+            {
+                if (child is Element element)
+                    element.OnAddedToTree();
+            }
         }
 
         public void AddChildren(params IElement[] children)
@@ -104,6 +113,9 @@ namespace VertexEngine.Common.Elements
 
         public void RemoveChild(IElement child)
         {
+            if (child is Element element)
+                element.OnRemovedFromTree();
+
             childrenManager.RemoveChild(child);
 
             child.TreeChanged -= OnTreeChanged;
@@ -133,6 +145,14 @@ namespace VertexEngine.Common.Elements
         protected virtual void DePropagateAssets(IElement child)
         {
             renderOptionsManager.DePropagate(child);
+        }
+
+        protected virtual void OnAddedToTree()
+        {
+        }
+
+        protected virtual void OnRemovedFromTree()
+        {
         }
 
         protected void OnAssetChanged()

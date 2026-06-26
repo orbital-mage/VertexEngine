@@ -13,7 +13,6 @@ using VertexEngine.Common.Text;
 using VertexEngine.Graphics2D.Assets;
 using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
-using GameWindow = VertexEngine.GameWindow;
 
 namespace VertexEngine.Graphics2D.Elements;
 
@@ -53,8 +52,16 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
         };
 
         Material[MaterialUniforms.Color] = Vector3.One;
+    }
 
+    protected override void OnAddedToTree()
+    {
         Viewport.SizeChanged += OnViewportSizeChanged;
+    }
+
+    protected override void OnRemovedFromTree()
+    {
+        Viewport.SizeChanged -= OnViewportSizeChanged;
     }
 
     public string Text
@@ -129,7 +136,11 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
 
     private void RenderText()
     {
-        if (FontSystem is null || string.IsNullOrEmpty(text)) return;
+        if (FontSystem is null || string.IsNullOrEmpty(text))
+        {
+            ClearText();
+            return;
+        }
 
         var font = FontSystem.GetFont(fontSize);
 
@@ -140,5 +151,11 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
         VertexObject = vertexObject;
         Material[MaterialUniforms.FontAtlas] = atlas;
         LocalTransform.ContentSize = size;
+    }
+
+    private void ClearText()
+    {
+        VertexObject = null;
+        Material.Remove(MaterialUniforms.FontAtlas);
     }
 }
