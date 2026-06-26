@@ -23,6 +23,7 @@ namespace VertexEngine.Common.Rendering
         public void Bind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, handle);
+            Viewport.OnFramebufferBound(this);
         }
 
         public void AttachTexture(Texture texture, FramebufferAttachment attachment)

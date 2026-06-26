@@ -56,7 +56,7 @@ namespace VertexEngine.Graphics2D.Assets
 
         public Vector2i ContainerSize
         {
-            get => containerSize ?? Viewport.Size;
+            get => containerSize ?? Viewport.GetSize(FrameBuffer.Default);
             set
             {
                 containerSize = value;
@@ -66,7 +66,7 @@ namespace VertexEngine.Graphics2D.Assets
 
         public Vector2i ContentSize
         {
-            get => contentSize ?? Viewport.Size;
+            get => contentSize ?? Viewport.GetSize(FrameBuffer.Default);
             set
             {
                 if (value.X == 0 || value.Y == 0) throw new ZeroScaleException();

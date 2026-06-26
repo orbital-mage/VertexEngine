@@ -126,7 +126,7 @@ namespace VertexEngine.Graphics2D.Elements.Tree
             {
                 Position = local.Position + (parent?.Position ?? Vector2i.Zero),
                 Rotation = local.Rotation + (parent?.Rotation ?? 0),
-                Size = local.Size,
+                Scale = local.Scale,
                 ContainerSize = local.ContainerSize,
                 ContentSize = local.ContentSize,
             }.Matrix;
@@ -138,7 +138,7 @@ namespace VertexEngine.Graphics2D.Elements.Tree
             {
                 Position = global.Position - (parent?.Position ?? Vector2i.Zero),
                 Rotation = global.Rotation - (parent?.Rotation ?? 0),
-                Size = global.Size,
+                Scale = global.Scale,
                 ContainerSize = global.ContainerSize,
                 ContentSize = global.ContentSize,
             }.Matrix;

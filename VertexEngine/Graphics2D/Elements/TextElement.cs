@@ -13,6 +13,7 @@ using VertexEngine.Common.Text;
 using VertexEngine.Graphics2D.Assets;
 using VertexEngine.Graphics2D.Elements.Interfaces;
 using VertexEngine.Graphics2D.Elements.Tree;
+using GameWindow = VertexEngine.GameWindow;
 
 namespace VertexEngine.Graphics2D.Elements;
 
@@ -53,7 +54,7 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
 
         Material[MaterialUniforms.Color] = Vector3.One;
 
-        Viewport.SizeChanged += (_, _) => RenderText();
+        Viewport.SizeChanged += OnViewportSizeChanged;
     }
 
     public string Text
@@ -118,6 +119,12 @@ public class TextElement : Element, ITextElement, ITransformElement2D, ICameraEl
     {
         get => cameraManager.Camera;
         set => cameraManager.Camera = value;
+    }
+    
+    private void OnViewportSizeChanged(object? sender, ViewportSizeChangedEventArgs e)
+    {
+        if (e.FrameBuffer == FrameBuffer.Default)
+            RenderText();
     }
 
     private void RenderText()

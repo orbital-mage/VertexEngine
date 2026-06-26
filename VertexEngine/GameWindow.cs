@@ -44,6 +44,7 @@ namespace VertexEngine
         {
             root = new Element();
             renderer = new SimpleRenderer(root, Size);
+            Viewport.SetSize(FrameBuffer.Default, Size);
 
             Caches.ProjectName = Title;
             BackgroundColor = new Vector4(0.2f, 0.3f, 0.3f, 1f);
@@ -87,6 +88,7 @@ namespace VertexEngine
             base.OnResize(args);
             
             renderer.ViewportSize = Size;
+            Viewport.SetSize(FrameBuffer.Default, Size);
         }
 
         protected void UseScreenRenderer()
