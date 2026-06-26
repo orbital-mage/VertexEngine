@@ -11,9 +11,10 @@ public class Texture2DManager : ITexture2DManager
 {
     public object CreateTexture(int width, int height)
     {
-        var texture = Texture2D.Empty(new Vector2i(width, height));
-        texture.SetMinMagFilter(TextureMinFilter.Linear, TextureMagFilter.Linear);
-        return texture;
+        return Texture2D.Empty(new Vector2i(width, height),
+            minFilter: TextureMinFilter.Linear,
+            magFilter: TextureMagFilter.Linear,
+            generateMipmap: false);
     }
 
     public Point GetTextureSize(object texture)

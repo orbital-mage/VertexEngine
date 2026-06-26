@@ -21,9 +21,13 @@ namespace VertexEngine.Common.Assets.Textures
         public static Texture2D Empty(Vector2i size,
             PixelInternalFormat internalFormat = PixelInternalFormat.Rgba,
             PixelFormat format = PixelFormat.Rgba,
-            PixelType type = PixelType.UnsignedByte)
+            PixelType type = PixelType.UnsignedByte,
+            TextureMinFilter minFilter = TextureMinFilter.Nearest,
+            TextureMagFilter magFilter = TextureMagFilter.Nearest,
+            TextureWrapMode wrapMode = TextureWrapMode.Clamp,
+            bool generateMipmap = true)
         {
-            return new Texture2D(size, internalFormat, format, type);
+            return new Texture2D(size, internalFormat, format, type, minFilter, magFilter, wrapMode, generateMipmap);
         }
 
         private Texture2D(ImageResult image)
@@ -37,14 +41,18 @@ namespace VertexEngine.Common.Assets.Textures
         private Texture2D(Vector2i size,
             PixelInternalFormat internalFormat,
             PixelFormat format,
-            PixelType type)
+            PixelType type,
+            TextureMinFilter minFilter,
+            TextureMagFilter magFilter,
+            TextureWrapMode wrapMode,
+            bool generateMipmap)
         {
             this.format = format;
             this.type = type;
             Size = size;
 
             LoadEmptyImageData(size, TextureTarget.Texture2D, internalFormat, format, type);
-            SetTextureParameters();
+            SetTextureParameters(minFilter, magFilter, wrapMode, generateMipmap);
         }
 
         public void SetBorderColor(Vector4 color)
@@ -63,17 +71,20 @@ namespace VertexEngine.Common.Assets.Textures
             LoadSubImageData(offset, size, data, TextureTarget.Texture2D, format, type);
         }
 
-        private static void SetTextureParameters()
+        private static void SetTextureParameters(
+            TextureMinFilter minFilter = TextureMinFilter.Nearest,
+            TextureMagFilter magFilter = TextureMagFilter.Nearest,
+            TextureWrapMode wrapMode = TextureWrapMode.Clamp,
+            bool generateMipmap = true)
         {
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Clamp);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Clamp);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrapMode);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapMode);
 
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            if (generateMipmap)
+                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
     }
 }
