@@ -57,7 +57,7 @@ namespace VertexEngine.Graphics2D.Assets
         public Vector2i ContainerSize
         {
             get => containerSize ?? Viewport.GetSize(FrameBuffer.Default);
-            set
+            internal set
             {
                 containerSize = value;
                 UpdateMatrix(Translation, Scale, Rotation);
@@ -67,7 +67,7 @@ namespace VertexEngine.Graphics2D.Assets
         public Vector2i ContentSize
         {
             get => contentSize ?? Viewport.GetSize(FrameBuffer.Default);
-            set
+            internal set
             {
                 if (value.X == 0 || value.Y == 0) throw new ZeroScaleException();
 
