@@ -7,7 +7,7 @@ namespace VertexEngine.Common.Rendering
         private const int BranchThreshold = 100;
 
         protected readonly Dictionary<T, IRenderTreeBranch> Dictionary = new();
-        private readonly Dictionary<IElement, T> keyReference = new();
+        protected readonly Dictionary<IElement, T> KeyReference = new();
         private readonly HashSet<T> emptyBranches = [];
 
         public virtual void AddElement(IElement element)
@@ -20,22 +20,24 @@ namespace VertexEngine.Common.Rendering
                 InitBranch(key);
 
             Dictionary[key].AddElement(element);
-            keyReference[element] = key;
+            KeyReference[element] = key;
             emptyBranches.Remove(key);
         }
 
         public virtual void RemoveElement(IElement element)
         {
-            var key = keyReference[element];
+            var key = KeyReference[element];
             Dictionary[key]?.RemoveElement(element);
 
             if (Dictionary[key].IsEmpty())
                 emptyBranches.Add(key);
+
+            KeyReference.Remove(element);
         }
 
         public abstract void Draw();
 
-        public void CollectGarbage()
+        public virtual void CollectGarbage()
         {
             if (emptyBranches.Count >= BranchThreshold)
             {

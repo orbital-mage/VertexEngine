@@ -16,9 +16,22 @@ namespace VertexEngine.Common.Rendering
 
         public override void RemoveElement(IElement element)
         {
+            var key = KeyReference[element];
             base.RemoveElement(element);
 
-            priorityOrder.Remove(element.Priority);
+            if (!Dictionary.ContainsKey(key) || Dictionary[key].IsEmpty())
+                priorityOrder.Remove(key);
+        }
+
+        public override void CollectGarbage()
+        {
+            base.CollectGarbage();
+
+            foreach (var priority in priorityOrder.ToArray())
+            {
+                if (!Dictionary.ContainsKey(priority) || Dictionary[priority].IsEmpty())
+                    priorityOrder.Remove(priority);
+            }
         }
 
         public override void Draw()
