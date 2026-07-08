@@ -12,10 +12,10 @@ namespace VertexEngine.Common.Rendering
             handle = GL.GenRenderbuffer();
         }
 
-        public RenderBufferObject(RenderbufferStorage storage, Vector2i size)
+        public RenderBufferObject(RenderbufferStorage storage, Vector2i size, int samples = 1)
         {
             handle = GL.GenRenderbuffer();
-            SetRenderBufferStorage(storage, size);
+            SetRenderBufferStorage(storage, size, samples);
         }
 
         public void Bind()
@@ -23,10 +23,14 @@ namespace VertexEngine.Common.Rendering
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, handle);
         }
 
-        public void SetRenderBufferStorage(RenderbufferStorage storage, Vector2i size)
+        public void SetRenderBufferStorage(RenderbufferStorage storage, Vector2i size, int samples = 1)
         {
             Bind();
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, storage, size.X, size.Y);
+            
+            if (samples > 1)
+                GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, samples, storage, size.X, size.Y);
+            else
+                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, storage, size.X, size.Y);
         }
     }
 }

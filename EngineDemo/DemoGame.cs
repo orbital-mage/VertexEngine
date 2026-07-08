@@ -3,6 +3,8 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using VertexEngine.Common.Assets.Materials;
+using VertexEngine.Common.Elements;
+using VertexEngine.Common.Rendering;
 using VertexEngine.Common.Utils;
 using VertexEngine.Graphics2D.Elements;
 using VertexEngine.Graphics3D.Assets.Cameras;
@@ -11,11 +13,11 @@ using GameWindow = VertexEngine.GameWindow;
 
 namespace EngineDemo;
 
-public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
-    : GameWindow(gameWindowSettings, nativeWindowSettings)
+public class DemoGame : GameWindow
 {
     private Element3D? rotatingCube;
     private float rotation;
+    private readonly TextureRenderer2D textureRenderer;
 
     public static NativeWindowSettings CreateWindowSettings() => new()
     {
@@ -24,11 +26,29 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
         NumberOfSamples = 4,
     };
 
+    public DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(
+        gameWindowSettings, nativeWindowSettings)
+    {
+        textureRenderer = new TextureRenderer2D(new Element(), Size)
+        {
+            BackgroundColor = new Vector4(0.12f, 0.14f, 0.18f, 1f),
+            NumberOfSamples = 4
+        };
+    }
+
     protected override void OnLoad()
     {
         base.OnLoad();
 
-        BackgroundColor = new Vector4(0.12f, 0.14f, 0.18f, 1f);
+        var textureElement = new TextureElement(textureRenderer.Texture)
+        {
+            LocalTransform =
+            {
+                Position = Size / 2,
+                Size = Size,
+            }
+        };
+        Root.AddChild(textureElement);
 
         var aspectRatio = (float)Size.X / Size.Y;
         var camera = new PerspectiveCamera(new Vector3(0f, 0.5f, 5f), aspectRatio)
@@ -40,19 +60,30 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
         rotatingCube = new Element3D(Shapes.Cube)
         {
             Camera = camera,
+            Material =
+            {
+                { MaterialUniforms.Diffuse3, new Vector3(0.82f, 0.88f, 0.96f) }
+            },
+            LocalTransform =
+            {
+                Rotation = Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f)) *
+                           Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians(15f))
+            }
         };
-        rotatingCube.Material[MaterialUniforms.Diffuse3] = new Vector3(0.82f, 0.88f, 0.96f);
-        rotatingCube.LocalTransform.Rotation =
-            Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f)) *
-            Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians(15f));
 
         var sphere = new Element3D(Shapes.Sphere)
         {
             Camera = camera,
+            Material =
+            {
+                { MaterialUniforms.Diffuse3, new Vector3(0.95f, 0.55f, 0.45f) }
+            },
+            LocalTransform =
+            {
+                Position = new Vector3(-2.2f, -0.4f, 0f),
+                Scale = new Vector3(0.75f)
+            }
         };
-        sphere.Material[MaterialUniforms.Diffuse3] = new Vector3(0.95f, 0.55f, 0.45f);
-        sphere.LocalTransform.Position = new Vector3(-2.2f, -0.4f, 0f);
-        sphere.LocalTransform.Scale = new Vector3(0.75f);
 
         var fontSystem = CreateFontSystem();
 
@@ -60,7 +91,7 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
         var subtitle = CreateText(fontSystem, "Rotated 2D shapes and 3D geometry highlight anti-aliasing", 18,
             new Vector2i(500, 88), new Vector3(0.75f, 0.8f, 0.85f));
 
-        Root.AddChildren(
+        textureRenderer.Root.AddChildren(
             rotatingCube,
             sphere,
             CreateShape(new Vector2i(180, 820), new Vector2i(220, 36), 12f, new Vector3(0.35f, 0.75f, 0.95f)),
@@ -72,9 +103,16 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
             subtitle);
     }
 
+    protected override void OnDraw(FrameEventArgs args)
+    {
+        textureRenderer.Draw();
+        base.OnDraw(args);
+    }
+
     protected override void OnUpdateFrame(FrameEventArgs args)
     {
         base.OnUpdateFrame(args);
+        textureRenderer.UpdateTree();
 
         if (rotatingCube is null) return;
 
@@ -82,6 +120,12 @@ public class DemoGame(GameWindowSettings gameWindowSettings, NativeWindowSetting
         rotatingCube.LocalTransform.Rotation =
             Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(rotation)) *
             Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians(15f));
+    }
+
+    protected override void OnResize(ResizeEventArgs args)
+    {
+        base.OnResize(args);
+        textureRenderer.ViewportSize = Size;
     }
 
     private static Element2D CreateShape(Vector2i position, Vector2i size, float rotationDegrees, Vector3 color)

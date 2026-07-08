@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using VertexEngine.Common.Assets.Textures;
 using VertexEngine.Graphics3D.Assets;
 
@@ -69,6 +70,18 @@ namespace VertexEngine.Common.Rendering
                 attachment,
                 RenderbufferTarget.Renderbuffer,
                 GL.GetInteger(GetPName.RenderbufferBinding));
+        }
+
+        public void BlitTo(FrameBuffer target,
+            Vector2i size,
+            ClearBufferMask mask = ClearBufferMask.ColorBufferBit,
+            BlitFramebufferFilter filter = BlitFramebufferFilter.Nearest)
+        {
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, handle);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, target.handle);
+            GL.BlitFramebuffer(0, 0, size.X, size.Y, 0, 0, size.X, size.Y, mask, filter);
+            
+            target.Bind();
         }
 
         public void SetDrawBuffer(DrawBufferMode mode)
